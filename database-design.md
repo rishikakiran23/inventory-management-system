@@ -56,6 +56,12 @@ User 1:N StockMovement
 ## Table Design
 
 ### roles
+Column | Type | Constraint
+id | BIGINT | PK
+name | VARCHAR(50) | NOT NULL, UNIQUE
+description | VARCHAR(255) |
+created_at | TIMESTAMP | NOT NULL
+
 ### users
 ### categories
 ### products
