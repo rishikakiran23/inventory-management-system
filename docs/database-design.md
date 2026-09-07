@@ -146,7 +146,7 @@
 ### Additional Constraint
 
 ```text
-UNIQUE(product_id, warehouse_id)
+UNIQUE(product_id, warehouse_id)```
 
 ## ER Diagram
 
