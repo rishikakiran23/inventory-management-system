@@ -174,7 +174,8 @@
 ```text
 STOCK_IN
 STOCK_OUT
-ADJUSTMENT```
+ADJUSTMENT
+```
 
 ---
 
@@ -214,7 +215,8 @@ PENDING
 CONFIRMED
 PROCESSING
 COMPLETED
-CANCELLED```
+CANCELLED
+```
 
 ---
 
@@ -250,7 +252,8 @@ CANCELLED```
 ```text
 LOW_STOCK
 ORDER_CREATED
-STOCK_RECEIVED```
+STOCK_RECEIVED
+```
 
 ---
 
@@ -262,19 +265,22 @@ The following constraints should be applied in addition to the primary key, fore
 
 ```sql
 CHECK (price >= 0)
-CHECK (reorder_level >= 0)```
+CHECK (reorder_level >= 0)
+```
 
 ### 2. Inventory
 
 ```sql
 CHECK (quantity >= 0)
-UNIQUE (product_id, warehouse_id)```
+UNIQUE (product_id, warehouse_id)
+```
 
 ### 3. Stock Movements
 
 ```sql
 CHECK (quantity > 0)
-CHECK (movement_type IN ('STOCK_IN', 'STOCK_OUT', 'ADJUSTMENT'))```
+CHECK (movement_type IN ('STOCK_IN', 'STOCK_OUT', 'ADJUSTMENT'))
+```
 
 ### 4. Orders
 
@@ -286,14 +292,16 @@ CHECK (status IN (
     'PROCESSING',
     'COMPLETED',
     'CANCELLED'
-))```
+))
+```
 
 ### 5. Order Items
 
 ```sql
 CHECK (quantity > 0)
 CHECK (unit_price >= 0)
-CHECK (subtotal >= 0)```
+CHECK (subtotal >= 0)
+```
 
 ### 6. Product Suppliers
 
