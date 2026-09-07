@@ -16,65 +16,137 @@
 12. Notification
 13. AuditLog
 
+---
+
 ## Relationships
 
-### User and Role
-Role 1:N User
+- Role 1:N User
+- Category 1:N Product
+- Product N:M Supplier — resolved through ProductSupplier
+- Product N:M Warehouse — resolved through Inventory
+- Inventory 1:N StockMovement
+- User 1:N StockMovement
+- Customer 1:N Order
+- Order 1:N OrderItem
+- Product 1:N OrderItem
+- User 1:N Notification
+- User 1:N AuditLog
 
-### Category and Product
-Category 1:N Product
+---
 
-### Product and Supplier
-Product N:M Supplier
-Resolved through ProductSupplier
+# Table Design
 
-### Product and Warehouse
-Product N:M Warehouse
-Resolved through Inventory
+## 1. roles
 
-### Inventory and StockMovement
-Inventory 1:N StockMovement
+| Column | Type | Constraint |
+|---|---|---|
+| id | BIGINT | PRIMARY KEY |
+| name | VARCHAR(50) | NOT NULL, UNIQUE |
+| description | VARCHAR(255) | NULL |
+| created_at | TIMESTAMP | NOT NULL |
 
-### Customer and Order
-Customer 1:N Order
+---
 
-### Order and OrderItem
-Order 1:N OrderItem
+## 2. users
 
-### Product and OrderItem
-Product 1:N OrderItem
+| Column | Type | Constraint |
+|---|---|---|
+| id | BIGINT | PRIMARY KEY |
+| username | VARCHAR(50) | NOT NULL, UNIQUE |
+| email | VARCHAR(100) | NOT NULL, UNIQUE |
+| password | VARCHAR(255) | NOT NULL |
+| role_id | BIGINT | NOT NULL, FOREIGN KEY → roles.id |
+| is_active | BOOLEAN | NOT NULL |
+| created_at | TIMESTAMP | NOT NULL |
+| updated_at | TIMESTAMP | NOT NULL |
 
-### User and Notification
-User 1:N Notification
+---
 
-### User and AuditLog
-User 1:N AuditLog
+## 3. categories
 
-### User and StockMovement
-User 1:N StockMovement
+| Column | Type | Constraint |
+|---|---|---|
+| id | BIGINT | PRIMARY KEY |
+| name | VARCHAR(100) | NOT NULL, UNIQUE |
+| description | VARCHAR(255) | NULL |
+| created_at | TIMESTAMP | NOT NULL |
+| updated_at | TIMESTAMP | NOT NULL |
 
-## Table Design
+---
 
-### roles
-Column | Type | Constraint
-id | BIGINT | PK
-name | VARCHAR(50) | NOT NULL, UNIQUE
-description | VARCHAR(255) |
-created_at | TIMESTAMP | NOT NULL
+## 4. products
 
-### users
-### categories
-### products
-### suppliers
-### product_suppliers
-### warehouses
-### inventory
-### stock_movements
-### customers
-### orders
-### order_items
-### notifications
-### audit_logs
+| Column | Type | Constraint |
+|---|---|---|
+| id | BIGINT | PRIMARY KEY |
+| sku | VARCHAR(50) | NOT NULL, UNIQUE |
+| name | VARCHAR(150) | NOT NULL |
+| description | TEXT | NULL |
+| price | DECIMAL(12,2) | NOT NULL |
+| reorder_level | INT | NOT NULL |
+| category_id | BIGINT | NOT NULL, FOREIGN KEY → categories.id |
+| is_active | BOOLEAN | NOT NULL |
+| created_at | TIMESTAMP | NOT NULL |
+| updated_at | TIMESTAMP | NOT NULL |
+
+---
+
+## 5. suppliers
+
+| Column | Type | Constraint |
+|---|---|---|
+| id | BIGINT | PRIMARY KEY |
+| name | VARCHAR(150) | NOT NULL |
+| email | VARCHAR(100) | NULL |
+| phone | VARCHAR(20) | NULL |
+| address | TEXT | NULL |
+| is_active | BOOLEAN | NOT NULL |
+| created_at | TIMESTAMP | NOT NULL |
+| updated_at | TIMESTAMP | NOT NULL |
+
+---
+
+## 6. product_suppliers
+
+| Column | Type | Constraint |
+|---|---|---|
+| product_id | BIGINT | PRIMARY KEY, FOREIGN KEY → products.id |
+| supplier_id | BIGINT | PRIMARY KEY, FOREIGN KEY → suppliers.id |
+| supplier_product_code | VARCHAR(100) | NULL |
+| created_at | TIMESTAMP | NOT NULL |
+
+> `product_id + supplier_id` form a composite primary key.
+
+---
+
+## 7. warehouses
+
+| Column | Type | Constraint |
+|---|---|---|
+| id | BIGINT | PRIMARY KEY |
+| name | VARCHAR(100) | NOT NULL |
+| code | VARCHAR(30) | NOT NULL, UNIQUE |
+| address | TEXT | NULL |
+| is_active | BOOLEAN | NOT NULL |
+| created_at | TIMESTAMP | NOT NULL |
+| updated_at | TIMESTAMP | NOT NULL |
+
+---
+
+## 8. inventory
+
+| Column | Type | Constraint |
+|---|---|---|
+| id | BIGINT | PRIMARY KEY |
+| product_id | BIGINT | NOT NULL, FOREIGN KEY → products.id |
+| warehouse_id | BIGINT | NOT NULL, FOREIGN KEY → warehouses.id |
+| quantity | INT | NOT NULL |
+| updated_at | TIMESTAMP | NOT NULL |
+
+### Additional Constraint
+
+```text
+UNIQUE(product_id, warehouse_id)
 
 ## ER Diagram
 
