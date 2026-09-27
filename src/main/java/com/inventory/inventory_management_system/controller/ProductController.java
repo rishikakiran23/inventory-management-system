@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.inventory.inventory_management_system.dto.ProductRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/products")
@@ -26,9 +27,11 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createProduct(
+    public ResponseEntity<Product> createProduct(
             @Valid @RequestBody ProductRequest request) {
 
-        return ResponseEntity.ok().build();
+        Product product = productService.createProduct(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 }
