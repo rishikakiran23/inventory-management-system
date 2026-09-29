@@ -10,7 +10,6 @@ import com.inventory.inventory_management_system.dto.SupplierRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/suppliers")
